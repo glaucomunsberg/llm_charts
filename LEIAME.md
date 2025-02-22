@@ -2,9 +2,11 @@
 
 Este projeto permite hospedar um modelo de linguagem grande (LLM) em uma máquina Ubuntu usando Docker. A aplicação usa [LibreChat](https://www.librechat.ai/) como interface web para interação com o modelo [Llama 3.2:1b](https://ollama.com/library/llama3.2:1b), rodando sobre a plataforma [Ollama](https://ollama.com/). Além disso, o sistema usa um banco de dados vetorial ([PGVector](https://github.com/pgvector/pgvector)) utilizado pelo [RAG API](https://github.com/danny-avila/rag_api) e o [MongoDB](https://hub.docker.com/_/mongo) para armazenar conversas e dados relevantes.
 
-![sistem_design](/data/docs/system_design.png)
+![screenshot](/data/docs/screenshot-pdf-png.png)
 
 ## 📌 Visão Geral da Arquitetura
+
+![sistem_design](/data/docs/system_design.png)
 
 A aplicação é composta pelos seguintes serviços:
 
