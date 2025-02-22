@@ -169,3 +169,11 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+#OLLAMA
+/ollama/models/*
+/ollama/tmp/*
+/chats/livre-chat/images/*
+/chats/livre-chat/logs/*
+/chats/livre-chat/meili_data_v1_7/*

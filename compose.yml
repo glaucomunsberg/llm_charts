@@ -1,0 +1,68 @@
+services:
+
+  # LibreChat
+
+  api:
+    container_name: librechat
+    image: ghcr.io/danny-avila/librechat-dev:latest
+    env_file:
+      - ./docker/livre-chat/.env
+    restart: always
+    user: "${UID}:${GID}"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "${PORT:-3080}:${PORT:-3080}"
+    depends_on:
+      - mongodb
+      - rag_api
+    volumes:
+      - type: bind
+        source: ./docker/livre-chat/.env
+        target: /app/.env
+      - ./chats/livre-chat/images:/app/client/public/images
+      - ./chats/livre-chat/logs:/app/api/logs
+      - ./chats/livre-chat/librechat.yaml:/app/librechat.yaml
+
+  mongodb:
+    container_name: livrechat_mongodb
+    command: mongod --noauth
+    image: mongo
+    restart: always
+    user: "${UID}:${GID}"
+    volumes:
+      - livechat_mongodata:/data/db
+
+  meilisearch:
+    container_name: livrechat_meilisearch
+    image: getmeili/meilisearch:v1.7.3
+    restart: always
+    user: "${UID}:${GID}"
+    env_file:
+      - ./docker/meilisearch/.env
+    volumes:
+      - ./chats/livre-chat/meili_data_v1_7:/meili_data
+
+  vectordb:
+    container_name: livrechat_vectordb
+    image: ankane/pgvector:latest
+    env_file:
+      - ./docker/pgvector/.env
+    restart: always
+    volumes:
+      - livrechat_pgdata:/var/lib/postgresql/data
+  
+  rag_api:
+    container_name: livrechat_rag_api
+    image: ghcr.io/danny-avila/librechat-rag-api-dev:latest
+    env_file:
+      - ./docker/livre-chat-rag-api/.env
+      - ./docker/livre-chat/.env
+    restart: always
+    depends_on:
+      - vectordb
+
+volumes:
+  livrechat_pgdata:
+  livechat_mongodata:
+  chromadb_data:
